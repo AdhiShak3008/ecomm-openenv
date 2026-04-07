@@ -28,6 +28,7 @@ CASES = load_cases()
 
 # -------- Global State --------
 current_case = None
+current_task = None  
 last_reward = None
 last_action = None
 awaiting_followup = False
@@ -135,9 +136,18 @@ def get_tasks():
 
 @app.api_route("/reset", methods=["GET", "POST"], response_model=State)
 def reset():
-    global current_case, last_reward, last_action, awaiting_followup
+    global current_case, current_task, last_reward, last_action, awaiting_followup
 
-    current_case = random.choice(CASES)
+    current_task = random.choice(["refund_task", "replacement_task", "fraud_task"])
+
+    if current_task == "refund_task":
+        pool = [c for c in CASES if c["expected_action"] == "approve_refund"]
+    elif current_task == "replacement_task":
+        pool = [c for c in CASES if c["expected_action"] == "approve_replacement"]
+    else:
+        pool = [c for c in CASES if c["expected_action"] == "reject"]
+
+    current_case = random.choice(pool) if pool else random.choice(CASES)
 
     last_reward = None
     last_action = None
@@ -169,23 +179,21 @@ def step(action: Action):
     if not current_case:
         return {
             "observation": Observation(ticket=""),
-            "reward": 0.1,  # FIXED (no 0.0)
+            "reward": 0.1,
             "done": True,
             "info": {}
         }
 
-    # Step 1: ask for info
     if action.action_type == "request_info" and not awaiting_followup:
         awaiting_followup = True
 
         return {
             "observation": build_followup_observation(current_case),
-            "reward": 0.1,  # FIXED (no 0.0)
+            "reward": 0.1,
             "done": False,
             "info": {"stage": "followup"}
         }
 
-    # Step 2: final decision
     reward = compute_reward(action.action_type, current_case)
 
     last_reward = reward
@@ -205,6 +213,14 @@ def grader():
         return {"score": 0.1}
 
     score = float(last_reward)
+
+    if current_task == "refund_task":
+        score *= 0.95
+    elif current_task == "replacement_task":
+        score *= 0.9
+    elif current_task == "fraud_task":
+        score *= 0.85
+
     score = max(0.1, min(0.9, score))
     return {"score": score}
 
