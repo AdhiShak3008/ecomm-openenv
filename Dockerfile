@@ -1,12 +1,18 @@
-FROM python:3.10-slim
+FROM python:3.10
 
 WORKDIR /app
 
-# Copy everything
-COPY . .
+# Upgrade pip (prevents a bunch of random install issues)
+RUN pip install --upgrade pip
+
+# Copy only dependency files first (better build stability)
+COPY pyproject.toml uv.lock ./
 
 # Install dependencies
 RUN pip install --no-cache-dir fastapi "uvicorn[standard]" requests
+
+# Now copy the rest of the app
+COPY . .
 
 # HF expects this port
 EXPOSE 7860
