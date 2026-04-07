@@ -1,0 +1,77 @@
+[
+  {
+    "id": "medium_001",
+    "product": "Sneakers",
+    "price": 3499,
+    "days_since_delivery": 5,
+    "issue_type": "size_issue",
+    "customer_message": "Size doesn't fit but I wore them once",
+    "has_images": false,
+    "return_history": 1,
+    "policy": {
+      "return_window_days": 7,
+      "allow_used": false
+    },
+    "expected_action": "reject"
+  },
+  {
+    "id": "medium_002",
+    "product": "Watch",
+    "price": 5999,
+    "days_since_delivery": 6,
+    "issue_type": "damaged",
+    "customer_message": "There is a scratch but still works",
+    "has_images": true,
+    "return_history": 0,
+    "policy": {
+      "return_window_days": 7,
+      "allow_used": true
+    },
+    "expected_action": "approve_replacement"
+  },
+  {
+    "id": "medium_003",
+    "product": "Jeans",
+    "price": 2499,
+    "days_since_delivery": 4,
+    "issue_type": "size_issue",
+    "customer_message": "Too tight, wore once outside",
+    "has_images": false,
+    "return_history": 2,
+    "policy": {
+      "return_window_days": 7,
+      "allow_used": false
+    },
+    "expected_action": "reject"
+  },
+  {
+    "id": "medium_004",
+    "product": "Bluetooth Speaker",
+    "price": 2999,
+    "days_since_delivery": 6,
+    "issue_type": "damaged",
+    "customer_message": "Sound is distorted sometimes",
+    "has_images": false,
+    "return_history": 0,
+    "policy": {
+      "return_window_days": 7,
+      "allow_used": true
+    },
+    "expected_action": "request_info"
+  },
+  {
+    "id": "medium_005",
+    "product": "Keyboard",
+    "price": 1999,
+    "days_since_delivery": 3,
+    "issue_type": "damaged",
+    "customer_message": "Some keys not working",
+    "has_images": true,
+    "return_history": 0,
+    "policy": {
+      "return_window_days": 7,
+      "allow_used": false
+    },
+    "expected_action": "approve_replacement"
+  }
+]

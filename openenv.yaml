@@ -1,0 +1,60 @@
+name: ecomm-return-env
+
+description: >
+  An OpenEnv environment simulating e-commerce customer support decisions.
+  The agent must decide whether to approve refunds, replacements, reject requests,
+  or ask for more information based on real-world constraints like fraud detection
+  and missing evidence.
+
+version: 1.0
+
+server:
+  base_url: https://shak3008-ecomm-openenv.hf.space
+
+endpoints:
+  reset: /reset
+  step: /step
+  state: /state
+  tasks: /tasks
+  grader: /grader
+  baseline: /baseline
+  health: /health
+
+action_space:
+  type: object
+  properties:
+    action_type:
+      type: string
+      enum:
+        - approve_refund
+        - approve_replacement
+        - reject
+        - request_info
+  required:
+    - action_type
+
+observation_space:
+  type: object
+  properties:
+    ticket:
+      type: string
+      description: Natural language customer support ticket
+
+reward:
+  type: float
+  range: [0.0, 1.0]
+
+tasks:
+  - name: easy
+    description: Simple return cases with clear signals.
+  - name: medium
+    description: Cases requiring interpretation of context.
+  - name: hard
+    description: Complex cases with fraud risk and missing information.
+
+metadata:
+  author: shak3008
+  difficulty: easy-medium-hard
+  domain: customer-support
+  interaction: multi-step
+  interaction_type: sequential

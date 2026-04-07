@@ -1,0 +1,92 @@
+[
+  {
+    "id": "easy_001",
+    "product": "Running Shoes",
+    "price": 2999,
+    "days_since_delivery": 2,
+    "issue_type": "damaged",
+    "customer_message": "The sole came off after one use",
+    "has_images": true,
+    "return_history": 0,
+    "policy": {
+      "return_window_days": 7,
+      "allow_used": false
+    },
+    "expected_action": "approve_refund"
+  },
+  {
+    "id": "easy_002",
+    "product": "T-Shirt",
+    "price": 799,
+    "days_since_delivery": 1,
+    "issue_type": "wrong_item",
+    "customer_message": "I ordered black but got red",
+    "has_images": true,
+    "return_history": 0,
+    "policy": {
+      "return_window_days": 7,
+      "allow_used": false
+    },
+    "expected_action": "approve_replacement"
+  },
+  {
+    "id": "easy_003",
+    "product": "Headphones",
+    "price": 1999,
+    "days_since_delivery": 3,
+    "issue_type": "not_needed",
+    "customer_message": "I changed my mind",
+    "has_images": false,
+    "return_history": 0,
+    "policy": {
+      "return_window_days": 7,
+      "allow_used": false
+    },
+    "expected_action": "reject"
+  },
+  {
+    "id": "easy_004",
+    "product": "Backpack",
+    "price": 1499,
+    "days_since_delivery": 2,
+    "issue_type": "damaged",
+    "customer_message": "Zip broke on first use",
+    "has_images": true,
+    "return_history": 0,
+    "policy": {
+      "return_window_days": 7,
+      "allow_used": false
+    },
+    "expected_action": "approve_refund"
+  },
+  {
+    "id": "easy_005",
+    "product": "Mobile Case",
+    "price": 499,
+    "days_since_delivery": 1,
+    "issue_type": "wrong_item",
+    "customer_message": "Received wrong color",
+    "has_images": true,
+    "return_history": 0,
+    "policy": {
+      "return_window_days": 7,
+      "allow_used": false
+    },
+    "expected_action": "approve_replacement"
+  },
+  {
+    "id": "easy_006",
+    "product": "Sunglasses",
+    "price": 1299,
+    "days_since_delivery": 2,
+    "issue_type": "not_needed",
+    "customer_message": "No longer want it",
+    "has_images": false,
+    "return_history": 0,
+    "policy": {
+      "return_window_days": 7,
+      "allow_used": false
+    },
+    "expected_action": "reject"
+  }
+]

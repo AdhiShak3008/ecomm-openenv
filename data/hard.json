@@ -1,0 +1,77 @@
+[
+  {
+    "id": "hard_001",
+    "product": "Laptop",
+    "price": 75000,
+    "days_since_delivery": 10,
+    "issue_type": "damaged",
+    "customer_message": "Screen flickers sometimes, please refund urgently",
+    "has_images": false,
+    "return_history": 0,
+    "policy": {
+      "return_window_days": 7,
+      "allow_used": true
+    },
+    "expected_action": "request_info"
+  },
+  {
+    "id": "hard_002",
+    "product": "Jacket",
+    "price": 4999,
+    "days_since_delivery": 3,
+    "issue_type": "fake_claim",
+    "customer_message": "This looks used already, very disappointed",
+    "has_images": false,
+    "return_history": 5,
+    "policy": {
+      "return_window_days": 7,
+      "allow_used": false
+    },
+    "expected_action": "reject"
+  },
+  {
+    "id": "hard_003",
+    "product": "Smartphone",
+    "price": 30000,
+    "days_since_delivery": 8,
+    "issue_type": "damaged",
+    "customer_message": "Battery drains fast, need refund",
+    "has_images": false,
+    "return_history": 0,
+    "policy": {
+      "return_window_days": 7,
+      "allow_used": true
+    },
+    "expected_action": "request_info"
+  },
+  {
+    "id": "hard_004",
+    "product": "Shoes",
+    "price": 3999,
+    "days_since_delivery": 2,
+    "issue_type": "fake_claim",
+    "customer_message": "Looks worn already",
+    "has_images": false,
+    "return_history": 6,
+    "policy": {
+      "return_window_days": 7,
+      "allow_used": false
+    },
+    "expected_action": "reject"
+  },
+  {
+    "id": "hard_005",
+    "product": "Tablet",
+    "price": 20000,
+    "days_since_delivery": 6,
+    "issue_type": "damaged",
+    "customer_message": "Screen has a faint line, not sure if it's serious",
+    "has_images": true,
+    "return_history": 1,
+    "policy": {
+      "return_window_days": 7,
+      "allow_used": true
+    },
+    "expected_action": "approve_replacement"
+  }
+]
