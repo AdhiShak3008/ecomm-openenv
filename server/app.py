@@ -28,7 +28,7 @@ CASES = load_cases()
 
 # -------- Global State --------
 current_case = None
-current_task = None  
+current_task = None
 last_reward = None
 last_action = None
 awaiting_followup = False
@@ -37,11 +37,6 @@ awaiting_followup = False
 # -------- Models --------
 class Action(BaseModel):
     action_type: str
-
-
-class Task(BaseModel):
-    id: str
-    difficulty: str
 
 
 class Observation(BaseModel):
@@ -125,12 +120,25 @@ def health():
     return {"status": "ok"}
 
 
-@app.get("/tasks", response_model=List[Task])
+# 🔥 TASKS WITH EXPLICIT GRADERS
+@app.get("/tasks")
 def get_tasks():
     return [
-        {"id": "refund_task", "difficulty": "easy"},
-        {"id": "replacement_task", "difficulty": "medium"},
-        {"id": "fraud_task", "difficulty": "hard"},
+        {
+            "id": "refund_task",
+            "difficulty": "easy",
+            "grader": "/grader/refund_task"
+        },
+        {
+            "id": "replacement_task",
+            "difficulty": "medium",
+            "grader": "/grader/replacement_task"
+        },
+        {
+            "id": "fraud_task",
+            "difficulty": "hard",
+            "grader": "/grader/fraud_task"
+        },
     ]
 
 
@@ -207,22 +215,45 @@ def step(action: Action):
     }
 
 
+# 🔥 GLOBAL GRADER ROUTES TO TASK-SPECIFIC
 @app.get("/grader")
 def grader():
+    if current_task == "refund_task":
+        return grader_refund()
+    elif current_task == "replacement_task":
+        return grader_replacement()
+    elif current_task == "fraud_task":
+        return grader_fraud()
+
+    return {"score": 0.1}
+
+
+# 🔥 TASK-SPECIFIC GRADERS
+@app.get("/grader/refund_task")
+def grader_refund():
     if last_reward is None:
         return {"score": 0.1}
 
-    score = float(last_reward)
+    score = float(last_reward) * 0.95
+    return {"score": max(0.1, min(0.9, score))}
 
-    if current_task == "refund_task":
-        score *= 0.95
-    elif current_task == "replacement_task":
-        score *= 0.9
-    elif current_task == "fraud_task":
-        score *= 0.85
 
-    score = max(0.1, min(0.9, score))
-    return {"score": score}
+@app.get("/grader/replacement_task")
+def grader_replacement():
+    if last_reward is None:
+        return {"score": 0.1}
+
+    score = float(last_reward) * 0.9
+    return {"score": max(0.1, min(0.9, score))}
+
+
+@app.get("/grader/fraud_task")
+def grader_fraud():
+    if last_reward is None:
+        return {"score": 0.1}
+
+    score = float(last_reward) * 0.85
+    return {"score": max(0.1, min(0.9, score))}
 
 
 @app.get("/baseline")
@@ -243,9 +274,7 @@ def baseline():
         score = compute_reward(action, case)
         total_score += score
 
-    return {
-        "baseline_score": total_score / n
-    }
+    return {"baseline_score": total_score / n}
 
 
 def main():
