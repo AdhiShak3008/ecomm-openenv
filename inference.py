@@ -2,13 +2,16 @@ import os
 import requests
 from openai import OpenAI
 
-API_BASE = os.getenv("API_BASE_URL")
+# 🔧 Separate LLM + ENV (CRITICAL FIX)
+LLM_BASE = os.getenv("API_BASE_URL")
+API_KEY = os.getenv("API_KEY")
 MODEL = os.getenv("MODEL_NAME")
-HF_TOKEN = os.getenv("HF_TOKEN")
+
+ENV_BASE = "https://shak3008-ecomm-openenv.hf.space"
 
 client = OpenAI(
-    base_url=API_BASE,
-    api_key=HF_TOKEN
+    base_url=LLM_BASE,
+    api_key=API_KEY
 )
 
 ACTIONS = [
@@ -52,7 +55,8 @@ def run_episode():
     print(f"[START] task={TASK_NAME} env={ENV_NAME} model={MODEL}", flush=True)
 
     try:
-        res = requests.get(f"{API_BASE}/reset").json()
+        # 🔧 use ENV_BASE (not API_BASE_URL)
+        res = requests.get(f"{ENV_BASE}/reset").json()
         obs = res["observation"]["ticket"]
         done = False
 
@@ -63,7 +67,7 @@ def run_episode():
 
             try:
                 res = requests.post(
-                    f"{API_BASE}/step",
+                    f"{ENV_BASE}/step",
                     json={"action_type": action}
                 ).json()
 
@@ -85,7 +89,8 @@ def run_episode():
                 flush=True
             )
 
-        score = requests.get(f"{API_BASE}/grader").json().get("score", 0.0)
+        # 🔧 use ENV_BASE here too
+        score = requests.get(f"{ENV_BASE}/grader").json().get("score", 0.0)
         score = max(0.0, min(1.0, float(score)))
 
         success = score > 0.0
