@@ -9,7 +9,7 @@ RUN pip install --upgrade pip
 COPY pyproject.toml uv.lock ./
 
 # Install dependencies
-RUN pip install --no-cache-dir fastapi "uvicorn[standard]" requests
+RUN pip install --no-cache-dir fastapi "uvicorn[standard]" requests openai
 
 # Now copy the rest of the app
 COPY . .
