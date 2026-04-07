@@ -2,11 +2,14 @@ import os
 import requests
 from openai import OpenAI
 
-API_BASE = os.getenv("API_BASE_URL", "https://shak3008-ecomm-openenv.hf.space")
-MODEL = os.getenv("MODEL_NAME", "gpt-4o-mini")
+API_BASE = os.getenv("API_BASE_URL")
+MODEL = os.getenv("MODEL_NAME")
 HF_TOKEN = os.getenv("HF_TOKEN")
 
-client = OpenAI(api_key=HF_TOKEN)
+client = OpenAI(
+    base_url=API_BASE,
+    api_key=HF_TOKEN
+)
 
 ACTIONS = [
     "approve_refund",
@@ -18,6 +21,7 @@ ACTIONS = [
 TASK_NAME = "ecommerce-support"
 ENV_NAME = "openenv"
 
+
 def choose_action(observation):
     try:
         response = client.chat.completions.create(
@@ -27,7 +31,8 @@ def choose_action(observation):
                 {"role": "user", "content": observation}
             ],
         )
-        text = response.choices[0].message.content.lower()
+
+        text = (response.choices[0].message.content or "").lower()
 
         for action in ACTIONS:
             if action in text:
