@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
-from typing import List, Optional
+from typing import Optional
 import random
 import json
 
@@ -120,7 +120,6 @@ def health():
     return {"status": "ok"}
 
 
-# 🔥 TASKS WITH EXPLICIT GRADERS
 @app.get("/tasks")
 def get_tasks():
     return [
@@ -143,11 +142,16 @@ def get_tasks():
 
 
 @app.api_route("/reset", methods=["GET", "POST"], response_model=State)
-def reset():
+def reset(task_id: Optional[str] = None):
     global current_case, current_task, last_reward, last_action, awaiting_followup
 
-    current_task = random.choice(["refund_task", "replacement_task", "fraud_task"])
+    # Use validator-provided task_id if available
+    if task_id in ["refund_task", "replacement_task", "fraud_task"]:
+        current_task = task_id
+    else:
+        current_task = random.choice(["refund_task", "replacement_task", "fraud_task"])
 
+    # Select case pool based on task
     if current_task == "refund_task":
         pool = [c for c in CASES if c["expected_action"] == "approve_refund"]
     elif current_task == "replacement_task":
@@ -215,7 +219,6 @@ def step(action: Action):
     }
 
 
-# 🔥 GLOBAL GRADER ROUTES TO TASK-SPECIFIC
 @app.get("/grader")
 def grader():
     if current_task == "refund_task":
@@ -228,7 +231,6 @@ def grader():
     return {"score": 0.1}
 
 
-# 🔥 TASK-SPECIFIC GRADERS
 @app.get("/grader/refund_task")
 def grader_refund():
     if last_reward is None:
