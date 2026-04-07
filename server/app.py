@@ -127,8 +127,9 @@ def health():
 @app.get("/tasks", response_model=List[Task])
 def get_tasks():
     return [
-        {"id": case["id"], "difficulty": case["difficulty"]}
-        for case in CASES
+        {"id": "refund_task", "difficulty": "easy"},
+        {"id": "replacement_task", "difficulty": "medium"},
+        {"id": "fraud_task", "difficulty": "hard"},
     ]
 
 
