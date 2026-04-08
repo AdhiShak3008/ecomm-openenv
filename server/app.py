@@ -170,7 +170,61 @@ def reset(task_id: Optional[str] = None):
         "difficulty": current_case["difficulty"],
         "observation": build_observation(current_case)
     }
+@app.get("/reset/refund_task", response_model=State)
+def reset_refund():
+    global current_case, current_task, last_reward, last_action, awaiting_followup
 
+    current_task = "refund_task"
+    pool = [c for c in CASES if c["expected_action"] == "approve_refund"]
+    current_case = random.choice(pool) if pool else random.choice(CASES)
+
+    last_reward = None
+    last_action = None
+    awaiting_followup = False
+
+    return {
+        "case_id": current_case["id"],
+        "difficulty": current_case["difficulty"],
+        "observation": build_observation(current_case)
+    }
+
+
+@app.get("/reset/replacement_task", response_model=State)
+def reset_replacement():
+    global current_case, current_task, last_reward, last_action, awaiting_followup
+
+    current_task = "replacement_task"
+    pool = [c for c in CASES if c["expected_action"] == "approve_replacement"]
+    current_case = random.choice(pool) if pool else random.choice(CASES)
+
+    last_reward = None
+    last_action = None
+    awaiting_followup = False
+
+    return {
+        "case_id": current_case["id"],
+        "difficulty": current_case["difficulty"],
+        "observation": build_observation(current_case)
+    }
+
+
+@app.get("/reset/fraud_task", response_model=State)
+def reset_fraud():
+    global current_case, current_task, last_reward, last_action, awaiting_followup
+
+    current_task = "fraud_task"
+    pool = [c for c in CASES if c["expected_action"] == "reject"]
+    current_case = random.choice(pool) if pool else random.choice(CASES)
+
+    last_reward = None
+    last_action = None
+    awaiting_followup = False
+
+    return {
+        "case_id": current_case["id"],
+        "difficulty": current_case["difficulty"],
+        "observation": build_observation(current_case)
+    }
 
 @app.get("/state", response_model=Optional[State])
 def get_state():
